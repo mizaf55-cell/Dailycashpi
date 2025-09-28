@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day Closing Balance - Pi Network</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="pi-icon">π</div>
+                    <h1>Day Closing Balance</h1>
+                </div>
+                <div class="date-display" id="currentDate"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Dashboard Section -->
+            <section class="dashboard">
+                <div class="dashboard-grid">
+                    <!-- Opening Balance Card -->
+                    <div class="card opening-balance-card">
+                        <div class="card__body">
+                            <h3>Opening Balance</h3>
+                            <div class="form-group">
+                                <input type="number" 
+                                       id="openingBalance" 
+                                       class="form-control balance-input" 
+                                       placeholder="Enter opening balance"
+                                       step="0.01">
+                            </div>
+                            <button class="btn btn--primary btn--sm" onclick="setOpeningBalance()">Set Balance</button>
+                        </div>
+                    </div>
+
+                    <!-- Summary Cards -->
+                    <div class="summary-cards">
+                        <div class="card summary-card">
+                            <div class="card__body">
+                                <div class="summary-value" id="totalSales">₹0.00</div>
+                                <div class="summary-label">Total Sales</div>
+                            </div>
+                        </div>
+                        <div class="card summary-card">
+                            <div class="card__body">
+                                <div class="summary-value" id="totalExpenses">₹0.00</div>
+                                <div class="summary-label">Total Expenses</div>
+                            </div>
+                        </div>
+                        <div class="card summary-card">
+                            <div class="card__body">
+                                <div class="summary-value" id="netCashFlow">₹0.00</div>
+                                <div class="summary-label">Net Cash Flow</div>
+                            </div>
+                        </div>
+                        <div class="card summary-card closing-balance">
+                            <div class="card__body">
+                                <div class="summary-value" id="closingBalance">₹0.00</div>
+                                <div class="summary-label">Closing Balance</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Transaction Entry Section -->
+            <section class="transaction-section">
+                <div class="section-header">
+                    <h2>Add Transaction</h2>
+                </div>
+                
+                <form id="transactionForm" class="transaction-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Transaction Type</label>
+                            <select id="transactionType" class="form-control">
+                                <option value="">Select transaction type</option>
+                                <option value="cash_sale">Cash Sales</option>
+                                <option value="digital_sale">Digital Sales</option>
+                                <option value="expense">Cash Expenses</option>
+                                <option value="other_income">Other Income</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Amount (₹)</label>
+                            <input type="number" 
+                                   id="transactionAmount" 
+                                   class="form-control" 
+                                   placeholder="0.00"
+                                   step="0.01"
+                                   min="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea id="transactionDescription" 
+                                  class="form-control" 
+                                  placeholder="Transaction description"
+                                  rows="2"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn--primary">Add Transaction</button>
+                        <button type="button" class="btn btn--secondary" onclick="clearForm()">Clear Form</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Transaction History -->
+            <section class="transaction-history">
+                <div class="section-header">
+                    <h2>Today's Transactions</h2>
+                    <button class="btn btn--outline btn--sm" onclick="clearAllTransactions()">Clear All</button>
+                </div>
+                <div id="transactionsList" class="transactions-list">
+                    <div class="empty-state">
+                        <p>No transactions added yet</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Daily Summary Report -->
+            <section class="daily-summary">
+                <div class="section-header">
+                    <h2>Daily Summary</h2>
+                    <button class="btn btn--outline btn--sm" onclick="exportSummary()">Export Summary</button>
+                </div>
+                
+                <div class="card">
+                    <div class="card__body">
+                        <div class="summary-report">
+                            <div class="summary-row">
+                                <span>Opening Balance:</span>
+                                <span id="summaryOpeningBalance">₹0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Cash Sales:</span>
+                                <span id="summaryCashSales">₹0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Digital Sales:</span>
+                                <span id="summaryDigitalSales">₹0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Other Income:</span>
+                                <span id="summaryOtherIncome">₹0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Total Income:</span>
+                                <span id="summaryTotalIncome">₹0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Cash Expenses:</span>
+                                <span id="summaryCashExpenses">₹0.00</span>
+                            </div>
+                            <div class="summary-row total-row">
+                                <span>Closing Balance:</span>
+                                <span id="summaryClosingBalance">₹0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Physical Cash Balance:</span>
+                                <span id="summaryPhysicalCash">₹0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Pi Network Day Closing Balance App. Developed for Pi Network Ecosystem.</p>
+        </div>
+    </footer>
+
+    <!-- Success/Error Messages -->
+    <div id="messageContainer" class="message-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
